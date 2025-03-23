@@ -18,7 +18,9 @@
 {% endtest %}
 
 {% test assert_close(model, actual, expected, decimal_place=2) %}
-    select * from {{ model }} where round({{ actual }}::numeric, {{ decimal_place }}) != round({{ expected }}::numeric, {{ decimal_place }})
+    select * from {{ model }}
+    where
+        abs({{ actual }} - {{ expected }}) > power(10, -{{ decimal_place }})
 {% endtest %}
 
 {% test assert_not_null(model, column) %}

@@ -15,7 +15,7 @@ for estimation details
 /* Natural Logarithm Function */
 {% macro _ln(x) %}
     {% set x = x | float %}
-    
+
     -- Handle special cases
     {% if x < 0 %}
         {{ exceptions.raise_compiler_error("Cannot calculate logarithm of negative number") }}
@@ -63,14 +63,10 @@ for estimation details
 {% endmacro %}
 
 /* Exponential Function */
-/* Using Taylor series expansion */
+/* Use hard coded euler constant */
 {% macro _exp(x) %}
     {% set x = x | float %}
-    
-    -- Use the approximation of e^x = 2^(x / ln(2))
-    {% set result = 2 ** (x / dbt_stat_test._ln(2)) %}
-
-    {{ return(result) }}
+    {{ return(2.718281828459045235 ** x) }}
 {% endmacro %}
 
 /* Absolute Value Function */

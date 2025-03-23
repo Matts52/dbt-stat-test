@@ -116,7 +116,39 @@ models:
       - assert_close:
           actual: actual_p_value
           expected: expected_p_value
-          decimal_place: 2
+          decimal_place: 3
+      - assert_equal_boolean:
+          actual: actual_reject_null
+          expected: expected_reject_null
+
+  - name: test_two_sample_paired_t_test
+    data_tests:
+      - assert_close:
+          actual: actual_mean_diff
+          expected: expected_mean_diff
+          decimal_place: 3
+      - assert_close:
+          actual: actual_stddev_diff
+          expected: expected_stddev_diff
+          decimal_place: 3
+      - assert_equal:
+          actual: actual_n
+          expected: expected_n
+      - assert_close:
+          actual: actual_std_error
+          expected: expected_std_error
+          decimal_place: 3
+      - assert_equal:
+          actual: actual_degrees_of_freedom
+          expected: expected_degrees_of_freedom
+      - assert_close:
+          actual: actual_t_stat
+          expected: expected_t_stat
+          decimal_place: 3
+      - assert_close:
+          actual: actual_p_value
+          expected: expected_p_value
+          decimal_place: 3
       - assert_equal_boolean:
           actual: actual_reject_null
           expected: expected_reject_null

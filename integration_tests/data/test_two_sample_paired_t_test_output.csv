@@ -1,0 +1,3 @@
+input,mean_diff,stddev_diff,n,std_error,degrees_of_freedom,t_stat,p_value,reject_null
+input_1,0.8,1.64316,5.0,0.73484,4.0,1.0887,0.3375,FALSE
+input_2,-7.4,3.5071,5.0,1.5684,4.0,-4.7181,0.009185,TRUE

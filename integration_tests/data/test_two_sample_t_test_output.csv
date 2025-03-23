@@ -1,0 +1,3 @@
+input,mu1,mu2,sigma1,sigma2,n1,n2,pooled_variance,std_error,degrees_of_freedom,t_stat,p_value,reject_null
+input_1,14.9461,20.4153,6.8425,4.8745,13.0,13.0,35.2912,2.3301,24.0,-2.3472,0.0275,TRUE
+input_2,4.5125,4.25,1.3303,2.0417,8.0,8.0,2.969,0.862,14.0,0.3047,0.7651,FALSE

@@ -23,11 +23,13 @@ for estimation details
         {{ return(-100000000) }}
     {% endif %}
 
-    /* Use Taylor series for small values of x */
+    /* Use Logarithm rule for small values of x */
     {% if x < 0.75 %}
         {{ return(dbt_stat_test._ln_small(x)) }}
+    /* Use Taylor series for small values of x */
     {% elif x < 2.0 %}
         {{ return(dbt_stat_test._ln_taylor(x)) }}
+    /* Use asymptotic expansion for large values of x */
     {% else %}
         {{ return(dbt_stat_test._ln_large(x)) }}
     {% endif %}

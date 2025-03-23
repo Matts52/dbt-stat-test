@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: test__abs
+    data_tests:
+      - assert_equal:
+          actual: actual
+          expected: expected
+
+  - name: test__beta_inc
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 3
+
+  - name: test__exp
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 3
+
+  - name: test__ln
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 3
+
+  - name: test__log_gamma
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 3
+
+  - name: test__t_dist_cdf
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 3

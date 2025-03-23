@@ -1,8 +1,8 @@
-name: "ab_test_tests"
+name: "stat_test_tests"
 version: "1.0"
 config-version: 2
 
-profile: "integration_tests_duckdb"
+profile: "integration_tests_postgres"
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]

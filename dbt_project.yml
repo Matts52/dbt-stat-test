@@ -1,4 +1,4 @@
-name: "dbt_ab_test"
+name: "dbt_stat_test"
 version: "0.1.0"
 
 require-dbt-version: [">=1.1.0", "<2.0.0"]

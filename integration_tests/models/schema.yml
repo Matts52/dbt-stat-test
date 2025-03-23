@@ -35,9 +35,41 @@ models:
           expected: expected
           decimal_place: 3
 
+  - name: test__sqrt
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 3
+
   - name: test__t_dist_cdf
     data_tests:
       - assert_close:
           actual: actual
           expected: expected
           decimal_place: 3
+
+  - name: test_one_sample_t_test
+    data_tests:
+      - assert_close:
+          actual: actual_mu
+          expected: expected_mu
+          decimal_place: 3
+      - assert_close:
+          actual: actual_sigma
+          expected: expected_sigma
+          decimal_place: 3
+      - assert_equal:
+          actual: actual_n
+          expected: expected_n
+      - assert_close:
+          actual: actual_t_stat
+          expected: expected_t_stat
+          decimal_place: 3
+      - assert_close:
+          actual: actual_p_value
+          expected: expected_p_value
+          decimal_place: 3
+      - assert_equal_boolean:
+          actual: actual_reject_null
+          expected: expected_reject_null

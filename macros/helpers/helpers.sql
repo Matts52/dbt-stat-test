@@ -5,6 +5,13 @@ for estimation details
 ==============================================
 */
 
+/* Square Root Function */
+{% macro _sqrt(x) %}
+    {% set x = x | float %}
+    {% set result = x ** 0.5 %}
+    {{ return(result) }}
+{% endmacro %}
+
 /* Natural Logarithm Function */
 {% macro _ln(x) %}
     {% set x = x | float %}
@@ -98,22 +105,68 @@ for estimation details
     {{ return(LG) }}
 {% endmacro %}
 
+/* T Distribution CDF Function */
+{% macro _t_dist_cdf(X, df) %}
+    {% if df <= 0 %}
+        {{ exceptions.raise_compiler_error("Degrees of freedom must be positive") }}
+    {% endif %}
+
+    {% set vars = namespace(
+        X = X | float,
+        df = df | float,
+        A = df / 2.0,
+        S = 0.0,
+        Z = 0.0,
+        BT = 0.0,
+        betacdf = 0.0,
+        tcdf = 0.0
+    ) %}
+    
+    {% set vars.S = vars.A + 0.5 %}
+    {% set vars.Z = vars.df / (vars.df + vars.X * vars.X) %}
+
+    -- Breaking down BT into components
+    {% set vars.BT = dbt_stat_test._exp(
+        dbt_stat_test._log_gamma(vars.S) 
+        - dbt_stat_test._log_gamma(0.5) 
+        - dbt_stat_test._log_gamma(vars.A) 
+        + vars.A * dbt_stat_test._ln(vars.Z) 
+        + 0.5 * dbt_stat_test._ln(1.0 - vars.Z)
+    ) %}
+    
+    -- Determine which formula to use based on Z value
+    {% if vars.Z < (vars.A + 1.0) / (vars.S + 2.0) %}
+        {% set vars.betacdf = vars.BT * dbt_stat_test._beta_inc(vars.Z, vars.A, 0.5) %}
+    {% else %}
+        {% set vars.betacdf = 1.0 - vars.BT * dbt_stat_test._beta_inc(1.0 - vars.Z, 0.5, vars.A) %}
+    {% endif %}
+    
+    -- Final t-distribution calculation based on X sign
+    {% set vars.tcdf = vars.betacdf / 2.0 if vars.X < 0.0 else 1.0 - vars.betacdf / 2.0 %}
+
+    -- Round
+    {% set vars.tcdf = (vars.tcdf * 100000 | round) / 100000 %}
+
+    {{ return(vars.tcdf) }}
+{% endmacro %}
+
 /* Incomplete Beta Function */
 {% macro _beta_inc(X, A, B) %}
-    {% set X = X | float %}
-    {% set A = A | float %}
-    {% set B = B | float %}
+    {% set input = namespace(
+        X = X | float,
+        A = A | float,
+        B = B | float
+    ) %}
 
-    -- Create namespace to hold all variables that need to persist
     {% set vars = namespace(
-        A0=0.0,
-        B0=1.0,
-        A1=1.0,
-        B1=1.0,
-        M9=0.0,
-        A2=0.0,
-        C9=0.0
-    ) %} -- use vars.item to access variables
+        A0 = 0.0,
+        B0 = 1.0,
+        A1 = 1.0,
+        B1 = 1.0,
+        M9 = 0.0,
+        A2 = 0.0,
+        C9 = 0.0
+    ) %}
     
     {% set max_iterations = 100000 %}  -- Safety limit to prevent infinite loops
     {% set tolerance = 0.00001 %}
@@ -122,13 +175,13 @@ for estimation details
         {% set vars.A2 = vars.A1 %}
         
         -- First part of the iteration
-        {% set vars.C9 = -1.0 * (A + vars.M9) * (A + B + vars.M9) * X / (A + 2.0 * vars.M9) / (A + 2.0 * vars.M9 + 1.0) %}
+        {% set vars.C9 = -1.0 * (input.A + vars.M9) * (input.A + input.B + vars.M9) * input.X / (input.A + 2.0 * vars.M9) / (input.A + 2.0 * vars.M9 + 1.0) %}
         {% set vars.A0 = vars.A1 + vars.C9 * vars.A0 %}
         {% set vars.B0 = vars.B1 + vars.C9 * vars.B0 %}
         {% set vars.M9 = vars.M9 + 1.0 %}
         
         -- Second part of the iteration
-        {% set vars.C9 = vars.M9 * (B - vars.M9) * X / (A + 2.0 * vars.M9 - 1.0) / (A + 2.0 * vars.M9) %}
+        {% set vars.C9 = vars.M9 * (input.B - vars.M9) * input.X / (input.A + 2.0 * vars.M9 - 1.0) / (input.A + 2.0 * vars.M9) %}
         {% set vars.A1 = vars.A0 + vars.C9 * vars.A1 %}
         {% set vars.B1 = vars.B0 + vars.C9 * vars.B1 %}
         
@@ -144,72 +197,7 @@ for estimation details
         {% endif %}
     {% endfor %}
 
-    {{ return(vars.A1 / A) }}
-{% endmacro %}
-
-/* T Distribution CDF Function */
-{% macro _t_dist_cdf(X, df) %}
-    {% if df <= 0 %}
-        {{ exceptions.raise_compiler_error("Degrees of freedom must be positive") }}
-    {% endif %}
-
-    {% set X = X | float %}
-    {% set df = df | float %}
-    
-    -- Calculate components 
-    {% set A = df / 2.0 %}
-    {{ log("A (df/2) = " ~ A, info=True) }}
-
-    {% set S = A + 0.5 %}
-    {{ log("S (A + 0.5) = " ~ S, info=True) }}
-
-    {% set Z = df / (df + X * X) %}
-    {{ log("Z (df / (df + X^2)) = " ~ Z, info=True) }}
-
-    -- Breaking down BT into components
-    {% set logGammaS = dbt_stat_test._log_gamma(S) %}
-    {{ log("logGammaS (LogGamma(S)) = " ~ logGammaS, info=True) }}
-
-    {% set logGammaHalf = dbt_stat_test._log_gamma(0.5) %}
-    {{ log("logGammaHalf (LogGamma(0.5)) = " ~ logGammaHalf, info=True) }}
-
-    {% set logGammaA = dbt_stat_test._log_gamma(A) %}
-    {{ log("logGammaA (LogGamma(A)) = " ~ logGammaA, info=True) }}
-
-    {% set logZ = A * dbt_stat_test._ln(Z) %}
-    {{ log("logZ (A * log(Z)) = " ~ logZ, info=True) }}
-
-    {% set logOneMinusZ = 0.5 * dbt_stat_test._ln(1.0 - Z) %}
-    {{ log("logOneMinusZ (0.5 * log(1 - Z)) = " ~ logOneMinusZ, info=True) }}
-
-    {% set BT = dbt_stat_test._exp(logGammaS - logGammaHalf - logGammaA + logZ + logOneMinusZ) %}
-    {{ log("BT (final result) = " ~ BT, info=True) }}
-    
-    -- Determine which formula to use based on Z value
-    {% set betacdf = 0.0 %}
-    {% if Z < (A + 1.0) / (S + 2.0) %}
-        {% set betacdf = BT * dbt_stat_test._beta_inc(Z, A, 0.5) %}
-        {{ log("betacdf (first case) = " ~ betacdf, info=True) }}
-    {% else %}
-        {% set betacdf = 1.0 - BT * dbt_stat_test._beta_inc(1.0 - Z, 0.5, A) %}
-        {{ log("betacdf (second case) = " ~ betacdf, info=True) }}
-    {% endif %}
-    
-    -- Final t-distribution calculation based on X sign
-    {% set tcdf = 0.0 %}
-    {% if X < 0.0 %}
-        {% set tcdf = betacdf / 2.0 %}
-        {{ log("tcdf (X < 0) = " ~ tcdf, info=True) }}
-    {% else %}
-        {% set tcdf = 1.0 - betacdf / 2.0 %}
-        {{ log("tcdf (X >= 0) = " ~ tcdf, info=True) }}
-    {% endif %}
-
-    -- Round to 5 decimal places like JavaScript version
-    {% set tcdf = (tcdf * 100000 | round) / 100000 %}
-    {{ log("Final tcdf (rounded) = " ~ tcdf, info=True) }}
-
-    {{ return(tcdf) }}
+    {{ return(vars.A1 / input.A) }}
 {% endmacro %}
 
 

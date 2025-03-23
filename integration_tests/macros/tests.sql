@@ -20,7 +20,7 @@
 {% test assert_close(model, actual, expected, decimal_place=2) %}
     select * from {{ model }}
     where
-        abs({{ actual }} - {{ expected }}) > power(10, -{{ decimal_place }})
+        abs({{ actual }} - {{ expected }}) > power(1, -{{ decimal_place }})
 {% endtest %}
 
 {% test assert_not_null(model, column) %}

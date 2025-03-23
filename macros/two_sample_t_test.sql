@@ -42,7 +42,7 @@
         {% set df = n1 + n2 - 2 %}
         
         {# T-statistic #}
-        {% set t_stat = (mu1 - mu2) / std_error %}
+        {% set t_stat = (mu2 - mu1) / std_error %}
         
         {# Critical value and p-value #}
         {# TODO: Add one-tailed critical t value calculation -> see: https://github.com/Matts52/ECO304/blob/main/Scripts/StatisticalHelpers.js#L217 #}
@@ -54,7 +54,7 @@
         {% elif direction == '>' %}
             {% set p_value = 1 - dbt_stat_test._t_dist_cdf(t_stat, df) %}
         {% endif %}
-        
+
         {% set reject_null = p_value < alpha %}
 
 

@@ -41,7 +41,7 @@
         {% elif direction == '>' %}
             {% set p_value = 1 - dbt_stat_test._t_dist_cdf(t_stat, df) %}
         {% endif %}
-
+        
         {% set reject_null = p_value < alpha %}
 
     {% else %}

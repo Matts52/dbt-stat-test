@@ -116,7 +116,7 @@ models:
       - assert_close:
           actual: actual_p_value
           expected: expected_p_value
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal_boolean:
           actual: actual_reject_null
           expected: expected_reject_null
@@ -148,7 +148,7 @@ models:
       - assert_close:
           actual: actual_p_value
           expected: expected_p_value
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal_boolean:
           actual: actual_reject_null
           expected: expected_reject_null

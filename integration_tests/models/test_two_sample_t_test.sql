@@ -10,7 +10,13 @@ actual_output as (
     select 
         'input_1' as input,
         t_test.* 
-    from ({{ dbt_stat_test.two_sample_t_test('input_1_value', 'input_1_group', 'man', 'woman', ref('test_two_sample_t_test_input')) }}) AS t_test
+    from ({{ dbt_stat_test.two_sample_t_test(
+        'input_1_value',
+        'input_1_group',
+        'man',
+        'woman',
+        ref('test_two_sample_t_test_input')
+    ) }}) AS t_test
 
     union all
 

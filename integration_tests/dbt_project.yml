@@ -2,7 +2,7 @@ name: "stat_test_tests"
 version: "1.0"
 config-version: 2
 
-profile: "integration_tests_postgres"
+profile: "integration_tests_duckdb"
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]

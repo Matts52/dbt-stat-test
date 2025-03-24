@@ -94,6 +94,26 @@ models:
           actual: actual_reject_null
           expected: expected_reject_null
 
+  - name: test_one_way_anova
+    data_tests:
+      - assert_equal:
+          actual: actual_k_groups
+          expected: expected_k_groups
+      - assert_equal:
+          actual: actual_total_n
+          expected: expected_total_n
+      - assert_close:
+          actual: actual_f_stat
+          expected: expected_f_stat
+          decimal_place: 2
+      - assert_close:
+          actual: actual_p_value
+          expected: expected_p_value
+          decimal_place: 2
+      - assert_equal_boolean:
+          actual: actual_reject_null
+          expected: expected_reject_null
+
   - name: test_two_sample_t_test
     data_tests:
       - assert_close:

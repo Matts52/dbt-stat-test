@@ -206,7 +206,6 @@ for estimation details
 {% macro _n_choose_k(n, k) %}
     {% set n = n | float %}
     {% set k = k | float %}
-    {% set result = 0 %}
     {% set result = dbt_stat_test._exp(dbt_stat_test._log_gamma(n + 1) - dbt_stat_test._log_gamma(k + 1) - dbt_stat_test._log_gamma(n - k + 1)) %}
 
     {{ return(result | round(0)) }}
@@ -227,8 +226,8 @@ for estimation details
 
 
 /* Using relationship of F cdf with complete beta function and incomplete beta function */
-
-{% macro _f_pdf_dist(x, df1, df2) %}
+/* See https://en.wikipedia.org/wiki/F-distribution */
+{% macro _f_dist_pdf(x, df1, df2) %}
     {% set x = x | float %}
     {% set df1 = df1 | float %}
     {% set df2 = df2 | float %}
@@ -244,33 +243,28 @@ for estimation details
     {{ return(dbt_stat_test._exp(numerator - denominator)) }}
 {% endmacro %}
 
-{% macro _f_cdf_dist(x, df1, df2, num_points=1000) %}
+{% macro _f_dist_cdf(x, df1, df2, num_points=1000) %}
     
     {% if x <= 0 %}
         {{ return(0) }}
     {% endif %}
     
-    {# Create points from 0 to x #}
-    {% set dx = x / (num_points - 1) %}
-    {% set sum = 0 %}
+    {% set vars = namespace(
+        dx = x / (num_points - 1),
+        t = 0,
+        sum = 0
+    ) %}
     
-    {# First point (multiply by 0.5 for trapezoidal rule) #}
-    {% set sum = sum + 0.5 * dbt_stat_test._f_pdf_dist(0, df1, df2) %}
+    {% set vars.sum = vars.sum + 0.5 * dbt_stat_test._f_dist_pdf(0, df1, df2) %}
     
-    {# Middle points #}
     {% for i in range(1, num_points - 1) %}
-        {% set t = i * dx %}
-        {% set sum = sum + dbt_stat_test._f_pdf_dist(t, df1, df2) %}
+        {% set vars.t = i * vars.dx %}
+        {% set vars.sum = vars.sum + dbt_stat_test._f_dist_pdf(vars.t, df1, df2) %}
     {% endfor %}
     
-    {# Last point (multiply by 0.5 for trapezoidal rule) #}
-    {% set sum = sum + 0.5 * dbt_stat_test._f_pdf_dist(x, df1, df2) %}
-    
-    {# Multiply by dx to complete the integration #}
+    {% set vars.sum = vars.sum + 0.5 * dbt_stat_test._f_dist_pdf(x, df1, df2) %}
 
-    {% set result = sum * dx %}
-
-    {{ log(result, info=True) }}
+    {% set result = 1 - vars.sum * vars.dx %}
 
     {{ return(result) }}
     

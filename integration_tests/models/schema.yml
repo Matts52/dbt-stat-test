@@ -28,6 +28,13 @@ models:
           expected: expected
           decimal_place: 2
 
+  - name: test__f_dist_cdf
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 2
+
   - name: test__ln
     data_tests:
       - assert_close:

@@ -104,6 +104,7 @@ for estimation details
 {% endmacro %}
 
 /* T Distribution CDF Function */
+/* See https://www.math.ucla.edu/~tom/distributions/tDist.html */
 {% macro _t_dist_cdf(X, df) %}
     {% if df <= 0 %}
         {{ exceptions.raise_compiler_error("Degrees of freedom must be positive") }}
@@ -148,7 +149,8 @@ for estimation details
     {{ return(vars.tcdf) }}
 {% endmacro %}
 
-/* Incomplete Beta Function */
+/* Incomplete Beta Function from t-distribution calculation */
+/* See https://www.math.ucla.edu/~tom/distributions/tDist.html */
 {% macro _beta_inc(X, A, B) %}
     {% set input = namespace(
         X = X | float,
@@ -198,6 +200,80 @@ for estimation details
     {{ return(vars.A1 / input.A) }}
 {% endmacro %}
 
+/* Incomplete Beta Function */
+/* See https://github.com/thomasgladwin/Incomplete-beta-function */
+/* Helper function: Compute combination (n choose k) using gamma function */
+{% macro _n_choose_k(n, k) %}
+    {% set n = n | float %}
+    {% set k = k | float %}
+    {% set result = 0 %}
+    {% set result = dbt_stat_test._exp(dbt_stat_test._log_gamma(n + 1) - dbt_stat_test._log_gamma(k + 1) - dbt_stat_test._log_gamma(n - k + 1)) %}
 
+    {{ return(result | round(0)) }}
+{% endmacro %}
+
+/* Using the relationship between the beta and gamma functions */
+/* See https://en.wikipedia.org/wiki/Beta_function */
+{% macro _beta(A, B) %}
+    {% set term_one = dbt_stat_test._log_gamma(A) %}
+    {% set term_two = dbt_stat_test._log_gamma(B) %}
+    {% set term_three = dbt_stat_test._log_gamma(A + B) %}
+
+    {# Convert from log form to regular form #}
+    {% set result = dbt_stat_test._exp(term_one + term_two - term_three) %}
+
+    {{ return(result) }}
+{% endmacro %}
+
+
+/* Using relationship of F cdf with complete beta function and incomplete beta function */
+
+{% macro _f_pdf_dist(x, df1, df2) %}
+    {% set x = x | float %}
+    {% set df1 = df1 | float %}
+    {% set df2 = df2 | float %}
+    
+    {% set numerator = dbt_stat_test._log_gamma((df1 + df2) / 2.0) %}
+    {% set numerator = numerator + (df1 / 2.0) * dbt_stat_test._ln(df1 / df2) %}
+    {% set numerator = numerator + (df1 / 2.0 - 1) * dbt_stat_test._ln(x) %}
+    
+    {% set denominator = dbt_stat_test._log_gamma(df1 / 2.0) %}
+    {% set denominator = denominator + dbt_stat_test._log_gamma(df2 / 2.0) %}
+    {% set denominator = denominator + ((df1 + df2) / 2.0) * dbt_stat_test._ln(1 + (df1 / df2) * x) %}
+
+    {{ return(dbt_stat_test._exp(numerator - denominator)) }}
+{% endmacro %}
+
+{% macro _f_cdf_dist(x, df1, df2, num_points=1000) %}
+    
+    {% if x <= 0 %}
+        {{ return(0) }}
+    {% endif %}
+    
+    {# Create points from 0 to x #}
+    {% set dx = x / (num_points - 1) %}
+    {% set sum = 0 %}
+    
+    {# First point (multiply by 0.5 for trapezoidal rule) #}
+    {% set sum = sum + 0.5 * dbt_stat_test._f_pdf_dist(0, df1, df2) %}
+    
+    {# Middle points #}
+    {% for i in range(1, num_points - 1) %}
+        {% set t = i * dx %}
+        {% set sum = sum + dbt_stat_test._f_pdf_dist(t, df1, df2) %}
+    {% endfor %}
+    
+    {# Last point (multiply by 0.5 for trapezoidal rule) #}
+    {% set sum = sum + 0.5 * dbt_stat_test._f_pdf_dist(x, df1, df2) %}
+    
+    {# Multiply by dx to complete the integration #}
+
+    {% set result = sum * dx %}
+
+    {{ log(result, info=True) }}
+
+    {{ return(result) }}
+    
+{% endmacro %}
 
 

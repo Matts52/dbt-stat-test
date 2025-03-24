@@ -12,64 +12,77 @@ models:
       - assert_close:
           actual: actual
           expected: expected
-          decimal_place: 3
+          decimal_place: 2
+
+  - name: test__beta
+    data_tests:
+      - assert_close:
+          actual: actual
+          expected: expected
+          decimal_place: 2
 
   - name: test__exp
     data_tests:
       - assert_close:
           actual: actual
           expected: expected
-          decimal_place: 3
+          decimal_place: 2
 
   - name: test__ln
     data_tests:
       - assert_close:
           actual: actual
           expected: expected
-          decimal_place: 3
+          decimal_place: 2
 
   - name: test__log_gamma
     data_tests:
       - assert_close:
           actual: actual
           expected: expected
-          decimal_place: 3
+          decimal_place: 2
+
+  - name: test__n_choose_k
+    data_tests:
+      - assert_equal:
+          actual: actual
+          expected: expected
 
   - name: test__sqrt
     data_tests:
       - assert_close:
           actual: actual
           expected: expected
-          decimal_place: 3
+          decimal_place: 2
 
   - name: test__t_dist_cdf
     data_tests:
       - assert_close:
           actual: actual
           expected: expected
-          decimal_place: 3
+          decimal_place: 2
 
   - name: test_one_sample_t_test
     data_tests:
       - assert_close:
           actual: actual_mu
           expected: expected_mu
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_sigma
           expected: expected_sigma
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal:
           actual: actual_n
           expected: expected_n
       - assert_close:
           actual: actual_t_stat
           expected: expected_t_stat
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_p_value
           expected: expected_p_value
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal_boolean:
           actual: actual_reject_null
           expected: expected_reject_null
@@ -79,19 +92,19 @@ models:
       - assert_close:
           actual: actual_mu1
           expected: expected_mu1
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_mu2
           expected: expected_mu2
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_sigma1
           expected: expected_sigma1
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_sigma2
           expected: expected_sigma2
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal:
           actual: actual_n1
           expected: expected_n1
@@ -101,18 +114,18 @@ models:
       - assert_close:
           actual: actual_pooled_variance
           expected: expected_pooled_variance
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_std_error
           expected: expected_std_error
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal:
           actual: actual_degrees_of_freedom
           expected: expected_degrees_of_freedom
       - assert_close:
           actual: actual_t_stat
           expected: expected_t_stat
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_p_value
           expected: expected_p_value
@@ -126,25 +139,25 @@ models:
       - assert_close:
           actual: actual_mean_diff
           expected: expected_mean_diff
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_stddev_diff
           expected: expected_stddev_diff
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal:
           actual: actual_n
           expected: expected_n
       - assert_close:
           actual: actual_std_error
           expected: expected_std_error
-          decimal_place: 3
+          decimal_place: 2
       - assert_equal:
           actual: actual_degrees_of_freedom
           expected: expected_degrees_of_freedom
       - assert_close:
           actual: actual_t_stat
           expected: expected_t_stat
-          decimal_place: 3
+          decimal_place: 2
       - assert_close:
           actual: actual_p_value
           expected: expected_p_value

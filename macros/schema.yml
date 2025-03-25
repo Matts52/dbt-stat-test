@@ -1,0 +1,123 @@
+version: 2
+
+macros:
+  - name: one_sample_t_test
+    description: |
+      This macro performs a one-sample t-test to determine if the mean of a population differs from a hypothesized value.
+    arguments:
+      - name: column
+        type: string
+        description: Name of the field containing the sample data
+      - name: source_relation
+        type: string
+        description: A Relation (a ref or source) containing the sample data
+      - name: H0
+        type: float
+        description: The hypothesized population mean. Defaults to 0
+      - name: direction
+        type: string
+        description: |
+          The direction of the alternative hypothesis. Options are:
+          - '=' (default): Two-tailed test (μ ≠ H0)
+          - '<': One-tailed test (μ < H0)
+          - '>': One-tailed test (μ > H0)
+      - name: alpha
+        type: float
+        description: The significance level. Defaults to 0.05
+
+  - name: one_way_anova
+    description: |
+      This macro performs a one-way analysis of variance (ANOVA) to determine if there are statistically significant differences between the means of three or more independent groups.
+    arguments:
+      - name: value_column
+        type: string
+        description: Name of the field containing the dependent variable values
+      - name: group_column
+        type: string
+        description: Name of the field containing the group identifiers
+      - name: groups
+        type: list
+        description: List of group names to compare. Must contain at least 3 groups
+      - name: source_relation
+        type: string
+        description: A Relation (a ref or source) containing the data
+      - name: alpha
+        type: float
+        description: The significance level. Defaults to 0.05
+
+  - name: two_sample_f_test
+    description: |
+      This macro performs a two-sample F-test to determine if the variances of two populations are equal. This test is often used as a preliminary check before performing a two-sample t-test to determine which version of the t-test to use.
+    arguments:
+      - name: column
+        type: string
+        description: Name of the field containing the sample data
+      - name: group_column
+        type: string
+        description: Name of the field containing the group identifiers
+      - name: group_1_value
+        type: string
+        description: Value identifying the first group
+      - name: group_2_value
+        type: string
+        description: Value identifying the second group
+      - name: source_relation
+        type: string
+        description: A Relation (a ref or source) containing the data
+      - name: alpha
+        type: float
+        description: The significance level. Defaults to 0.05
+
+  - name: two_sample_paired_t_test
+    description: |
+      This macro performs a paired t-test to determine if there is a significant difference between two related samples. This test is appropriate when the same subjects are measured twice (e.g., before and after treatment) or when subjects are matched in pairs.
+    arguments:
+      - name: column_1
+        type: string
+        description: Name of the field containing the first set of measurements
+      - name: column_2
+        type: string
+        description: Name of the field containing the second set of measurements
+      - name: source_relation
+        type: string
+        description: A Relation (a ref or source) containing the paired data
+      - name: direction
+        type: string
+        description: |
+          The direction of the alternative hypothesis. Options are:
+          - '=' (default): Two-tailed test (μ1 ≠ μ2)
+          - '<': One-tailed test (μ1 < μ2)
+          - '>': One-tailed test (μ1 > μ2)
+      - name: alpha
+        type: float
+        description: The significance level. Defaults to 0.05
+
+  - name: two_sample_t_test
+    description: |
+      This macro performs an independent two-sample t-test to determine if there is a significant difference between the means of two independent groups. This test assumes equal variances between the groups (pooled t-test).
+    arguments:
+      - name: column
+        type: string
+        description: Name of the field containing the sample data
+      - name: group_column
+        type: string
+        description: Name of the field containing the group identifiers
+      - name: group_1_value
+        type: string
+        description: Value identifying the first group
+      - name: group_2_value
+        type: string
+        description: Value identifying the second group
+      - name: source_relation
+        type: string
+        description: A Relation (a ref or source) containing the data
+      - name: direction
+        type: string
+        description: |
+          The direction of the alternative hypothesis. Options are:
+          - '=' (default): Two-tailed test (μ1 ≠ μ2)
+          - '<': One-tailed test (μ1 < μ2)
+          - '>': One-tailed test (μ1 > μ2)
+      - name: alpha
+        type: float
+        description: The significance level. Defaults to 0.05

@@ -2,7 +2,7 @@ with test_input as (
     select * from {{ ref('test_one_way_anova_input') }}
 ),
 
-{# For tukey approach calculator: https://www.socscistatistics.com/tests/anova/default2.aspx #}
+{# For calculator: https://www.socscistatistics.com/tests/anova/default2.aspx #}
 expected_output as (
     select * from {{ ref('test_one_way_anova_output') }}
 ),

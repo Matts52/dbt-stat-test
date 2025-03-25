@@ -263,3 +263,11 @@ This macro performs an independent two-sample t-test to determine if there is a 
    )
 }}
 ```
+
+___
+
+#### Helper Functions
+
+Helper functions used in this package can be found in the `macros/helpers` directory. These functions are used internally by the statistical test macros and include implementations of common mathematical operations like square root, log gamma, t-distribution CDF calculations, and combinatorial functions.
+
+While these helper functions are not intended to be used directly, they are unit tested in their own right.

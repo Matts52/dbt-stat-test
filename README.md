@@ -1,4 +1,7 @@
-# dbt-stat-test
+
+![](./public/dbt_stat_test_logo.webp)
+*Logo created by Dall-E 3*
+
 
 This [dbt](https://github.com/dbt-labs/dbt) package contains macros that can be (re)used across dbt projects.
 

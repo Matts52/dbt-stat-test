@@ -14,11 +14,11 @@ This [dbt](https://github.com/dbt-labs/dbt) package contains macros that can be 
 
 | **Method** | **Postgres** | **DuckDB** | **Precision** |
 |------------|--------------|------------|---------------|
-| [one_sample_t_test](#one_sample_t_test) | ✅ | ✅ | 2 decimal places |
-| [one_way_anova](#one_way_anova) | ✅ | ✅ | 2 decimal places |
-| [paired_t_test](#paired_t_test) | ✅ | ✅ | 2 decimal places |
-| [two_sample_f_test](#two_sample_f_test) | ✅ | ✅ | 2 decimal places |
-| [two_sample_t_test](#two_sample_t_test) | ✅ | ✅ | 2 decimal places |
+| [one_sample_t_test](#one_sample_t_test) | ✅ | ✅ | 3 decimal places |
+| [one_way_anova](#one_way_anova) | ✅ | ✅ | 3 decimal places |
+| [paired_t_test](#paired_t_test) | ✅ | ✅ | 3 decimal places |
+| [two_sample_f_test](#two_sample_f_test) | ✅ | ✅ | 3 decimal places |
+| [two_sample_t_test](#two_sample_t_test) | ✅ | ✅ | 3 decimal places |
 
 Each statistical test macro includes:
 - Null hypothesis testing of a two-tailed hypothesis (and one tailed hypotheses in select macros)

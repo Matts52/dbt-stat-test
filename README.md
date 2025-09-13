@@ -188,8 +188,8 @@ This macro performs a paired t-test to determine if there is a significant diffe
 - `source_relation` (required): A Relation (a `ref` or `source`) containing the paired data
 - `direction` (optional): The direction of the alternative hypothesis. Options are:
   - `'='` (default): Two-tailed test (μ1 ≠ μ2)
-  - `'<'`: One-tailed test (μ1 < μ2)
-  - `'>'`: One-tailed test (μ1 > μ2)
+  - `'<'`: One-tailed test (μ1 > μ2)
+  - `'>'`: One-tailed test (μ1 < μ2)
 - `alpha` (optional): The significance level. Defaults to 0.05
 
 **Returns:**

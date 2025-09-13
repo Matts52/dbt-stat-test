@@ -1,8 +1,8 @@
-{% macro two_sample_paired_t_test(column_1, column_2, source_relation, direction='=', alpha=0.05) %}
-    {{ return(adapter.dispatch('two_sample_paired_t_test', 'dbt_stat_test')(column_1, column_2, source_relation, direction, alpha)) }}
+{% macro two_sample_paired_t_test(column_1, column_2, source_relation, direction='=', alpha=0.0, where='true') %}
+    {{ return(adapter.dispatch('two_sample_paired_t_test', 'dbt_stat_test')(column_1, column_2, source_relation, direction, alpha, where)) }}
 {% endmacro %}
 
-{% macro default__two_sample_paired_t_test(column_1, column_2, source_relation, direction='=', alpha=0.05) %}
+{% macro default__two_sample_paired_t_test(column_1, column_2, source_relation, direction, alpha, where) %}
 
     {% set stats_query %}
         select
@@ -11,8 +11,10 @@
             count(*) as n
         from {{ source_relation }}
         where
-            {{ column_1 }} is not null 
+            true
+            and {{ column_1 }} is not null 
             and {{ column_2 }} is not null
+            and {{ where }}
     {% endset %}
 
     {% set stats = run_query(stats_query) %}

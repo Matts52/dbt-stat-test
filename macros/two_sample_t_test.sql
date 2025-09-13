@@ -1,8 +1,8 @@
-{% macro two_sample_t_test(column, group_column, group_1_value, group_2_value, source_relation, direction='=', alpha=0.05) %}
-    {{ return(adapter.dispatch('two_sample_t_test', 'dbt_stat_test')(column, group_column, group_1_value, group_2_value, source_relation, direction, alpha)) }}
+{% macro two_sample_t_test(column, group_column, group_1_value, group_2_value, source_relation, direction='=', alpha=0.05, where='true') %}
+    {{ return(adapter.dispatch('two_sample_t_test', 'dbt_stat_test')(column, group_column, group_1_value, group_2_value, source_relation, direction, alpha, where)) }}
 {% endmacro %}
 
-{% macro default__two_sample_t_test(column, group_column, group_1_value, group_2_value, source_relation, direction='=', alpha=0.05) %}
+{% macro default__two_sample_t_test(column, group_column, group_1_value, group_2_value, source_relation, direction, alpha, where) %}
 
     {% set stats_query %}
         select
@@ -19,7 +19,10 @@
                 stddev({{ column }}) as stddev_val,
                 count(*) as n
             from {{ source_relation }}
-            where {{ group_column }} in ('{{ group_1_value }}', '{{ group_2_value }}')
+            where
+                true
+                and {{ group_column }} in ('{{ group_1_value }}', '{{ group_2_value }}')
+                and {{ where }}
             group by {{ group_column }}
         ) subq
     {% endset %}

@@ -78,6 +78,7 @@ This macro performs a one-sample t-test to determine if the mean of a population
   - `'<'`: One-tailed test (μ < H0)
   - `'>'`: One-tailed test (μ > H0)
 - `alpha` (optional): The significance level. Defaults to 0.05
+- `where` (optional): SQL WHERE clause to filter the data. Defaults to 'true'
 
 **Returns:**
 
@@ -97,7 +98,8 @@ This macro performs a one-sample t-test to determine if the mean of a population
         source_relation=ref('my_model'),
         H0=75,
         direction='=',
-        alpha=0.05
+        alpha=0.05,
+        where='test_scores >= 0 and test_scores <= 100'
    )
 }}
 ```
@@ -114,6 +116,7 @@ This macro performs a one-way analysis of variance (ANOVA) to determine if there
 - `groups` (required): List of group names to compare. Must contain at least 3 groups
 - `source_relation` (required): A Relation (a `ref` or `source`) containing the data
 - `alpha` (optional): The significance level. Defaults to 0.05
+- `where` (optional): SQL WHERE clause to filter the data. Defaults to 'true'
 
 **Returns:**
 
@@ -132,7 +135,8 @@ This macro performs a one-way analysis of variance (ANOVA) to determine if there
         group_column='subject',
         groups=['Math', 'History', 'Psychology'],
         source_relation=ref('my_model'),
-        alpha=0.05
+        alpha=0.05,
+        where='test_scores >= 0 and test_scores <= 100'
    )
 }}
 ```
@@ -150,6 +154,7 @@ This macro performs a two-sample F-test to determine if the variances of two pop
 - `group_2_value` (required): Value identifying the second group
 - `source_relation` (required): A Relation (a `ref` or `source`) containing the data
 - `alpha` (optional): The significance level. Defaults to 0.05
+- `where` (optional): SQL WHERE clause to filter the data. Defaults to 'true'
 
 **Returns:**
 
@@ -171,7 +176,8 @@ This macro performs a two-sample F-test to determine if the variances of two pop
         group_1_value='Control',
         group_2_value='Treatment',
         source_relation=ref('my_model'),
-        alpha=0.05
+        alpha=0.05,
+        where='test_scores >= 0 and test_scores <= 100'
    )
 }}
 ```
@@ -191,6 +197,7 @@ This macro performs a paired t-test to determine if there is a significant diffe
   - `'<'`: One-tailed test (μ1 > μ2)
   - `'>'`: One-tailed test (μ1 < μ2)
 - `alpha` (optional): The significance level. Defaults to 0.05
+- `where` (optional): SQL WHERE clause to filter the data. Defaults to 'true'
 
 **Returns:**
 - `mean_diff`: Mean of the differences between paired measurements
@@ -211,7 +218,8 @@ This macro performs a paired t-test to determine if there is a significant diffe
         column_2='post_test_scores',
         source_relation=ref('my_model'),
         direction='=',
-        alpha=0.05
+        alpha=0.05,
+        where='pre_test_scores >= 0 and post_test_scores >= 0'
    )
 }}
 ```
@@ -233,6 +241,7 @@ This macro performs an independent two-sample t-test to determine if there is a 
   - `'<'`: One-tailed test (μ1 < μ2)
   - `'>'`: One-tailed test (μ1 > μ2)
 - `alpha` (optional): The significance level. Defaults to 0.05
+- `where` (optional): SQL WHERE clause to filter the data. Defaults to 'true'
 
 **Returns:**
 - `mu1`: Mean of the first group
@@ -259,7 +268,8 @@ This macro performs an independent two-sample t-test to determine if there is a 
         group_2_value='Treatment',
         source_relation=ref('my_model'),
         direction='=',
-        alpha=0.05
+        alpha=0.05,
+        where='test_scores >= 0 and test_scores <= 100'
    )
 }}
 ```

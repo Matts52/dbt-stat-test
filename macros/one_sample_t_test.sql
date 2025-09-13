@@ -1,8 +1,8 @@
-{% macro one_sample_t_test(column, source_relation, H0=0, direction='=', alpha=0.05) %}
-    {{ return(adapter.dispatch('one_sample_t_test', 'dbt_stat_test')(column, source_relation, H0, direction, alpha)) }}
+{% macro one_sample_t_test(column, source_relation, H0=0, direction='=', alpha=0.05, where='true') %}
+    {{ return(adapter.dispatch('one_sample_t_test', 'dbt_stat_test')(column, source_relation, H0, direction, alpha, where)) }}
 {% endmacro %}
 
-{% macro default__one_sample_t_test(column, source_relation, H0=0, direction='=', alpha=0.05) %}
+{% macro default__one_sample_t_test(column, source_relation, H0, direction, alpha, where) %}
 
     {% set stats_query %}
         select
@@ -10,6 +10,9 @@
             stddev({{ column }}) as sigma,
             count(*) as n
         from {{ source_relation }}
+        where
+            true
+            and {{ where }}
     {% endset %}
 
     {% set stats = run_query(stats_query) %}

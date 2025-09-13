@@ -1,8 +1,8 @@
-{% macro one_way_anova(value_column, group_column, groups, source_relation, alpha=0.05) %}
-    {{ return(adapter.dispatch('one_way_anova', 'dbt_stat_test')(value_column, group_column, groups, source_relation, alpha)) }}
+{% macro one_way_anova(value_column, group_column, groups, source_relation, alpha=0.05, where='true') %}
+    {{ return(adapter.dispatch('one_way_anova', 'dbt_stat_test')(value_column, group_column, groups, source_relation, alpha, where)) }}
 {% endmacro %}
 
-{% macro default__one_way_anova(value_column, group_column, groups, source_relation, alpha=0.05) %}
+{% macro default__one_way_anova(value_column, group_column, groups, source_relation, alpha, where) %}
 
     {% if groups | length < 3 %}
         {{ exceptions.raise_compiler_error("One-way ANOVA requires at least 3 groups. Got " ~ groups | length ~ " groups.") }}
@@ -15,7 +15,10 @@
                 var_pop({{ value_column }}) as overall_variance,
                 count(*) as total_n
             from {{ source_relation }}
-            where {{ value_column }} is not null
+            where
+                true
+                and {{ value_column }} is not null
+                and {{ where }}
         ),
         
         group_stats as (

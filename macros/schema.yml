@@ -24,6 +24,9 @@ macros:
       - name: alpha
         type: float
         description: The significance level. Defaults to 0.05
+      - name: where
+        type: string
+        description: An optional SQL WHERE clause to filter the data. Defaults to 'true'
 
   - name: one_way_anova
     description: |
@@ -44,6 +47,9 @@ macros:
       - name: alpha
         type: float
         description: The significance level. Defaults to 0.05
+      - name: where
+        type: string
+        description: An optional SQL WHERE clause to filter the data. Defaults to 'true'
 
   - name: two_sample_f_test
     description: |
@@ -67,6 +73,9 @@ macros:
       - name: alpha
         type: float
         description: The significance level. Defaults to 0.05
+      - name: where
+        type: string
+        description: An optional SQL WHERE clause to filter the data. Defaults to 'true'
 
   - name: two_sample_paired_t_test
     description: |
@@ -91,6 +100,9 @@ macros:
       - name: alpha
         type: float
         description: The significance level. Defaults to 0.05
+      - name: where
+        type: string
+        description: An optional SQL WHERE clause to filter the data. Defaults to 'true'
 
   - name: two_sample_t_test
     description: |
@@ -121,3 +133,6 @@ macros:
       - name: alpha
         type: float
         description: The significance level. Defaults to 0.05
+      - name: where
+        type: string
+        description: An optional SQL WHERE clause to filter the data. Defaults to 'true'

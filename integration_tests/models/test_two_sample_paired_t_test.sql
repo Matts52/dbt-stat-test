@@ -13,7 +13,8 @@ actual_output as (
     from ({{ dbt_stat_test.two_sample_paired_t_test(
         column_1='input_1_1',
         column_2='input_1_2',
-        source_relation=ref('test_two_sample_paired_t_test_input')
+        source_relation=ref('test_two_sample_paired_t_test_input'),
+        alpha=0.05
     ) }}) as t_test
 
     union all
@@ -24,7 +25,8 @@ actual_output as (
     from ({{ dbt_stat_test.two_sample_paired_t_test(
         column_1='input_2_1',
         column_2='input_2_2',
-        source_relation=ref('test_two_sample_paired_t_test_input')
+        source_relation=ref('test_two_sample_paired_t_test_input'),
+        alpha=0.05
     ) }}) as t_test
 )
 
